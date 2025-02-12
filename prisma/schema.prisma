@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  username  String
+  email     String   @unique
+  password  String
+  profile   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  conversations     String[]       @db.ObjectId
+  ConversationUsers Conversation[] @relation(name: "conversationUsers", fields: [conversations], references: [id])
+  Message           Message[]      @relation("userId")
+
+  seenByIds String[]  @db.ObjectId
+  seenBy    Message[] @relation(fields: [seenByIds], references: [id])
+
+  archiveByIds String[]       @db.ObjectId
+  archiveBy    Conversation[] @relation(fields: [archiveByIds], references: [id])
+
+  userAdminIds String[]       @db.ObjectId
+  userAdmin    Conversation[] @relation(name: "userAdmin", fields: [userAdminIds], references: [id])
+
+  deletedByIds String[]  @db.ObjectId
+  deletedBy    Message[] @relation(name: "deletedBy", fields: [deletedByIds], references: [id])
+
+  notif Notif[]
+
+  userIds    String[] @db.ObjectId
+  notifUsers Notif[]  @relation(name: "userIds", fields: [userIds], references: [id])
+}
+
+model Conversation {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  userIds      String[]  @db.ObjectId
+  messages     Message[]
+  isGroupChat  Boolean   @default(false)
+  archiveByIds String[]  @db.ObjectId
+  gcName       String?
+  gcProfile    String?
+  userAdminIds String[]  @db.ObjectId
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  users     User[] @relation(name: "conversationUsers", fields: [userIds], references: [id])
+  archiveBy User[] @relation(fields: [archiveByIds], references: [id])
+  userAdmin User[] @relation(name: "userAdmin", fields: [userAdminIds], references: [id])
+}
+
+model Message {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  conversationId String   @db.ObjectId
+  userId         String   @db.ObjectId
+  text           String?
+  gif            String?
+  file           String?
+  quickReaction  String[]
+  seenByIds      String[] @db.ObjectId
+  deletedByIds   String[] @db.ObjectId
+  notif          Notif[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(name: "userId", fields: [userId], references: [id], onDelete: Cascade)
+  seenBy       User[]       @relation(fields: [seenByIds], references: [id])
+  deletedBy    User[]       @relation(name: "deletedBy", fields: [deletedByIds], references: [id])
+}
+
+model Notif {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  messageId    String   @db.ObjectId
+  userId       String   @db.ObjectId
+  notifMessage String?
+  userIds      String[] @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  users   User[]  @relation(name: "userIds", fields: [userIds], references: [id])
+}
