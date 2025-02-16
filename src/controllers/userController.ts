@@ -89,7 +89,7 @@ export async function login(req: Request, res: Response) {
 
 export async function logout(req: Request, res: Response) {
   try {
-    res.clearCookie("access_token");
+    res.clearCookie("access_token", { sameSite: "none", secure: true, httpOnly: true });
     res.status(200).json({ success: "Logout successfully" });
   } catch (error: any) {
     console.log(error.message);
