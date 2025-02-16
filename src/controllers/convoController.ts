@@ -10,11 +10,8 @@ export const createConvo = async (req: Request, res: Response) => {
 
     const convoExist = await prisma.conversation.findFirst({
       where: {
-        userIds: isSelfChat ? {
-          equals: [receiverId]
-        } : {
-          hasEvery: [user?.id, receiverId],
-        },
+        userIds: isSelfChat ? { equals: [receiverId] } : { hasEvery: [user?.id, receiverId] },
+        isGroupChat: false,
       },
     });
 
