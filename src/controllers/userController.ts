@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { NextFunction, Request, Response } from 'express';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../lib/prisma';
 import jwt from 'jsonwebtoken';
 
 export async function register(req: Request, res: Response) {
