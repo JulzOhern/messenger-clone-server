@@ -22,7 +22,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
 
-app.use("/api/uploadthing", createRouteHandler({ router: uploadRouter, config: {} }));
+app.use("/api/uploadthing", createRouteHandler({
+  router: uploadRouter,
+  config: {
+    token: process.env.UPLOADTHING_TOKEN
+  }
+}));
 app.use('/api', router);
 
 httpServer.listen(PORT, () => {
