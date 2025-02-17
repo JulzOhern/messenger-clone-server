@@ -20,7 +20,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "socket.io": "^4.8.1",
-    "uploadthing": "^7.4.4"
+    "uploadthing": "^7.5.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
