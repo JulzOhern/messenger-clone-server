@@ -24,7 +24,7 @@ app.use(cookieParser());
 
 app.use("/api/uploadthing", createRouteHandler({
   router: uploadRouter, config: {
-    callbackUrl: 'https://messenger-clone-server-production.up.railway.app/api/uploadthing'
+    token: "eyJhcGlLZXkiOiJza19saXZlXzk4NmExNTdlMmQ5ZWJjMGQxZTlhYjc3ZWJjYWJjOTE2NDJmY2I1M2FkY2E3MDQzMDViZWJjODg2ZTFkMTg5NTQiLCJhcHBJZCI6Impka2wzczBrMTQiLCJyZWdpb25zIjpbInNlYTEiXX0="
   }
 }));
 app.use('/api', router);
