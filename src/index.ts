@@ -19,15 +19,10 @@ const PORT = process.env.PORT || 9091
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ credentials: true, origin: true }));
+app.use(cors({ credentials: true, origin: "*" }));
 app.use(cookieParser());
 
-app.use("/api/uploadthing", createRouteHandler({
-  router: uploadRouter,
-  config: {
-    token: process.env.UPLOADTHING_TOKEN
-  }
-}));
+app.use("/api/uploadthing", createRouteHandler({ router: uploadRouter, config: {} }));
 app.use('/api', router);
 
 httpServer.listen(PORT, () => {
