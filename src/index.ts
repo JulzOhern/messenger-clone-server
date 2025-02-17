@@ -19,12 +19,14 @@ const PORT = process.env.PORT || 9091
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  credentials: true, origin: ['http://localhost:5173', 'http://localhost:4173', 'https://current-mala-noneee-8ebdc2b6.koyeb.app', 'https://scontent.fmnl17-6.fna.fbcdn.net']
-}));
+app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
 
-app.use("/api/uploadthing", createRouteHandler({ router: uploadRouter, config: {} }));
+app.use("/api/uploadthing", createRouteHandler({
+  router: uploadRouter, config: {
+    callbackUrl: 'https://messenger-clone-server-production.up.railway.app/api/uploadthing'
+  }
+}));
 app.use('/api', router);
 
 httpServer.listen(PORT, () => {
